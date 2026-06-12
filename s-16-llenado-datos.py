@@ -2,6 +2,7 @@ from faker import Faker
 import random
 from datetime import datetime, timedelta
 
+# Configurar Faker en español
 fake = Faker('es_MX')
 
 def generar_datos_usuarios(num_registros=2000):
@@ -10,6 +11,7 @@ def generar_datos_usuarios(num_registros=2000):
         f.write("ALTER SESSION SET CONTAINER = usuarios_pdb;\n")
         f.write("SET DEFINE OFF;\n\n")
         
+        # 1. Catálogo de Planes
         planes = [
             ("BASICO", "Plan Básico (1 Pantalla)", 99.00),
             ("ESTANDAR", "Plan Estándar (2 Pantallas HD)", 149.00),
@@ -20,6 +22,7 @@ def generar_datos_usuarios(num_registros=2000):
             fecha_inicio = fake.date_between(start_date='-2y', end_date='-1y').strftime('%d-%m-%Y')
             f.write(f"INSERT INTO PLAN (CLAVE, FECHA_INICIO, COSTO, DESCRIPCION) VALUES ('{clave}', TO_DATE('{fecha_inicio}', 'DD-MM-YYYY'), {costo}, '{desc}');\n")
         
+        # 2. Generación de Usuarios y Tarjetas
         tipos_tarjeta = ['Credito', 'Debito']
         for _ in range(num_registros):
             nombre = fake.first_name().replace("'", "")
@@ -48,6 +51,7 @@ def generar_datos_media_completo(num_contenidos=2000, num_reproducciones=2500, n
         f.write("ALTER SESSION SET CONTAINER = media_pdb;\n")
         f.write("SET DEFINE OFF;\n\n")
         
+        # 1. Catálogos Base
         generos = ['Rock', 'Pop', 'Jazz', 'Sci-Fi', 'Terror', 'Comedia', 'Drama', 'Documental', 'Anime', 'Clásica']
         for g in generos:
             f.write(f"INSERT INTO CONTENIDO_GENERO (NOMBRE, DESCRIPCION) VALUES ('{g}', 'Género {g}');\n")
@@ -56,12 +60,15 @@ def generar_datos_media_completo(num_contenidos=2000, num_reproducciones=2500, n
         for s in status_list:
             f.write(f"INSERT INTO CONTENIDO_STATUS (STATUS, DESCRIPCION) VALUES ('{s}', 'Estado: {s}');\n")
 
+        # Catálogos secundarios necesarios para llaves foráneas
+        # Asumiremos 50 series y 50 álbumes
         for _ in range(50):
             fecha = fake.date_between(start_date='-5y', end_date='today').strftime('%d-%m-%Y')
             f.write(f"INSERT INTO SERIE (NOMBRE, FECHA_LANZAMIENTO) VALUES ('{fake.catch_phrase().replace(chr(39), chr(39)+chr(39))}', TO_DATE('{fecha}', 'DD-MM-YYYY'));\n")
-            # Nota: ALBUM requiere un BLOB, se matendra vacio
+            # Nota: ALBUM requiere un BLOB, lo dejaremos vacío y se cargará luego con DBMS_LOB
             f.write(f"INSERT INTO ALBUM (NOMBRE, FECHA_LANZAMIENTO, IMAGEN) VALUES ('{fake.catch_phrase().replace(chr(39), chr(39)+chr(39))}', TO_DATE('{fecha}', 'DD-MM-YYYY'), EMPTY_BLOB());\n")
 
+        # 2. Contenido Multimedia Masivo (Audio y Video)
         f.write("\n-- Carga de Contenido Multimedia\n")
         tipos = ['AUDIO', 'VIDEO']
         for cont_id in range(1, num_contenidos + 1):
@@ -74,14 +81,17 @@ def generar_datos_media_completo(num_contenidos=2000, num_reproducciones=2500, n
             f.write(f"INSERT INTO CONTENIDO_MULTIMEDIA (TIPO, CLAVE, NOMBRE, TOTAL_REPRODUCCIONES, DURACION, GENERO_ID) "
                     f"VALUES ('{tipo}', '{clave}', '{nombre}', 0, {duracion}, {genero_id});\n")
             
+            # Insertar en la tabla hija correspondiente (Mismo ID)
             if tipo == 'AUDIO':
                 album_id = random.randint(1, 50)
                 f.write(f"INSERT INTO AUDIO (CONTENIDO_ID, FORMATO, KBPS, ALBUM_ID) VALUES ({cont_id}, 'MP3', 320, {album_id});\n")
             else:
                 serie_id = random.randint(1, 50)
+                # Omitimos CLASIFICACION por brevedad en este ejemplo, asumiendo valores por defecto o modificables.
                 f.write(f"INSERT INTO VIDEO (CONTENIDO_ID, TIPO_VIDEO, CLASIFICACION, TIPO_CODIFICACION, TIPO_TRANSPORTE, PROTOCOLO_TRANSMISION, SERIE_ID) "
                         f"VALUES ({cont_id}, 'HD', 'B', 'H.264', 'MPEG-TS', 'HLS', {serie_id});\n")
 
+        # 3. Reproducciones Particionadas (Año 2026)
         f.write("\n-- Carga de Reproducciones\n")
         fecha_inicio_2026 = datetime(2026, 1, 1)
         for _ in range(num_reproducciones):
@@ -91,6 +101,7 @@ def generar_datos_media_completo(num_contenidos=2000, num_reproducciones=2500, n
             f.write(f"INSERT INTO REPRODUCCION (FECHA, SEGUNDO_INICIAL, SEGUNDO_FINAL, CONTENIDO_ID, USUARIO_ID) "
                     f"VALUES (TO_DATE('{fecha_str}', 'DD-MM-YYYY'), 0, {random.randint(10, 180)}, {random.randint(1, num_contenidos)}, {random.randint(1, 2000)});\n")
 
+        # 4. Hilos de Comentarios
         f.write("\n-- Carga de Comentarios y Respuestas\n")
         comentarios_por_contenido = {}
         comentario_id_actual = 1
@@ -119,6 +130,7 @@ def generar_datos_media_completo(num_contenidos=2000, num_reproducciones=2500, n
 
         f.write("\nCOMMIT;\nEXIT;\n")
 
+# Ejecutar el pipeline completo
 generar_datos_usuarios()
 generar_datos_media_completo()
 print("¡Archivos SQL generados con éxito y listos para ejecutar!")

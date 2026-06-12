@@ -32,3 +32,38 @@ exception
         dbms_output.put_line('error en la carga: ' || sqlerrm);
 end;
 /
+
+CREATE OR REPLACE PROCEDURE actualizar_imagen_album(
+    p_album_id IN NUMERIC,
+    p_nombre_archivo IN VARCHAR2
+) AS
+    v_bfile BFILE;
+    v_blob BLOB;
+BEGIN
+    -- 1. Seleccionamos el BLOB vacío generado por Python y lo bloqueamos para escritura
+    SELECT IMAGEN INTO v_blob
+    FROM ALBUM
+    WHERE ALBUM_ID = p_album_id
+    FOR UPDATE;
+
+    -- 2. Apuntamos al archivo físico (Recuerda: el directorio va en MAYÚSCULAS)
+    v_bfile := BFILENAME('DIR_CARGA_BLOBS', p_nombre_archivo);
+
+    -- 3. Verificamos y volcamos el contenido en la fila existente
+    IF DBMS_LOB.FILEEXISTS(v_bfile) = 1 THEN
+        DBMS_LOB.FILEOPEN(v_bfile, DBMS_LOB.FILE_READONLY);
+        DBMS_LOB.LOADFROMFILE(v_blob, v_bfile, DBMS_LOB.GETLENGTH(v_bfile));
+        DBMS_LOB.FILECLOSE(v_bfile);
+        
+        DBMS_OUTPUT.PUT_LINE('Álbum ID ' || p_album_id || ' actualizado con éxito.');
+    ELSE
+        RAISE_APPLICATION_ERROR(-20001, 'El archivo ' || p_nombre_archivo || ' no existe.');
+    END IF;
+
+    COMMIT;
+EXCEPTION
+    WHEN OTHERS THEN
+        ROLLBACK;
+        DBMS_OUTPUT.PUT_LINE('Error en la actualización: ' || SQLERRM);
+END;
+/
