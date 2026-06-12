@@ -4,59 +4,138 @@
 #@Descripción:    Agrega en tnsnames.ora los alias para habilitar los modos de conexión
 
 cat << 'EOF' >> $ORACLE_HOME/network/admin/tnsnames.ora
+-- Todas las conexiones se guardan en oracle tnsnames.
 
+FREE =
+	(DESCRIPTION =
+          (ADDRESS_LIST =
+            (ADDRESS = (PROTOCOL = TCP)(HOST = h-ens-proy-final.fi.unam)(PORT = 1521))
+          )
+          (CONNECT_DATA =
+            (SERVICE_NAME = free.fi.unam)
+          )
+	)
 
-USUARIOS_DEDICADO =
+FREE_DEDICATED =
   (DESCRIPTION =
-    (ADDRESS = (PROTOCOL = TCP)(HOST = h-ens-proy-final)(PORT = 1521))
+    (ADDRESS = (PROTOCOL = TCP)(HOST = h-ens-proy-final.fi.unam)(PORT = 1521))
     (CONNECT_DATA =
       (SERVER = DEDICATED)
-      (SERVICE_NAME = usuarios_pdb)
+      (SERVICE_NAME = free.fi.unam)
     )
   )
 
-USUARIOS_COMPARTIDO =
+
+FREE_SHARED =
   (DESCRIPTION =
-    (ADDRESS = (PROTOCOL = TCP)(HOST = h-ens-proy-final)(PORT = 1521))
+    (ADDRESS = (PROTOCOL = TCP)(HOST = h-ens-proy-final.fi.unam)(PORT = 1521))
     (CONNECT_DATA =
       (SERVER = SHARED)
-      (SERVICE_NAME = usuarios_pdb)
+      (SERVICE_NAME = free.fi.unam)
     )
   )
 
-USUARIOS_POOL =
+
+
+FREE_POOLED =
   (DESCRIPTION =
-    (ADDRESS = (PROTOCOL = TCP)(HOST = h-ens-proy-final)(PORT = 1521))
-    (CONNECT_DATA =
-      (SERVER = POOLED)
-      (SERVICE_NAME = usuarios_pdb)
-    )
-  )
-  
-MEDIA_DEDICADO =
+    (ADDRESS_LIST =
+    (ADDRESS = (PROTOCOL = TCP)(HOST = h-ens-proy-final.fi.unam)(PORT = 1521))
+   )
+   (CONNECT_DATA =
+     (SERVICE_NAME = free.fi.unam)
+     (SERVER=POOLED)
+   )
+)
+
+
+
+USUARIOS =
+	(DESCRIPTION =
+          (ADDRESS_LIST =
+            (ADDRESS = (PROTOCOL = TCP)(HOST = h-ens-proy-final.fi.unam)(PORT = 1521))
+          )
+          (CONNECT_DATA =
+            (SERVICE_NAME = usuarios_pdb.fi.unam)
+          )
+	)
+
+
+USUARIOS_DEDICATED =
   (DESCRIPTION =
-    (ADDRESS = (PROTOCOL = TCP)(HOST = h-ens-proy-final)(PORT = 1521))
+    (ADDRESS = (PROTOCOL = TCP)(HOST = h-ens-proy-final.fi.unam)(PORT = 1521))
     (CONNECT_DATA =
       (SERVER = DEDICATED)
-      (SERVICE_NAME = media_pdb)
+      (SERVICE_NAME = usuarios_pdb.fi.unam)
     )
   )
 
-MEDIA_COMPARTIDO =
+USUARIOS_SHARED =
   (DESCRIPTION =
-    (ADDRESS = (PROTOCOL = TCP)(HOST = h-ens-proy-final)(PORT = 1521))
+    (ADDRESS = (PROTOCOL = TCP)(HOST = h-ens-proy-final.fi.unam)(PORT = 1521))
     (CONNECT_DATA =
       (SERVER = SHARED)
-      (SERVICE_NAME = media_pdb)
+      (SERVICE_NAME = usuarios_pdb.fi.unam)
     )
   )
 
-MEDIA_POOL =
+
+
+USUARIOS_POOLED =
   (DESCRIPTION =
-    (ADDRESS = (PROTOCOL = TCP)(HOST = h-ens-proy-final)(PORT = 1521))
+    (ADDRESS_LIST =
+    (ADDRESS = (PROTOCOL = TCP)(HOST = h-ens-proy-final.fi.unam)(PORT = 1521))
+   )
+   (CONNECT_DATA =
+     (SERVICE_NAME = usuarios_pdb.fi.unam)
+     (SERVER=POOLED)
+   )
+)
+
+
+
+
+
+
+MEDIA =
+	(DESCRIPTION =
+          (ADDRESS_LIST =
+            (ADDRESS = (PROTOCOL = TCP)(HOST = h-ens-proy-final.fi.unam)(PORT = 1521))
+          )
+          (CONNECT_DATA =
+            (SERVICE_NAME = media_pdb.fi.unam)
+          )
+	)
+
+
+MEDIA_DEDICATED =
+  (DESCRIPTION =
+    (ADDRESS = (PROTOCOL = TCP)(HOST = h-ens-proy-final.fi.unam)(PORT = 1521))
     (CONNECT_DATA =
-      (SERVER = POOLED)
-      (SERVICE_NAME = media_pdb)
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = media_pdb.fi.unam)
     )
   )
+
+MEDIA_SHARED =
+  (DESCRIPTION =
+    (ADDRESS = (PROTOCOL = TCP)(HOST = h-ens-proy-final.fi.unam)(PORT = 1521))
+    (CONNECT_DATA =
+      (SERVER = SHARED)
+      (SERVICE_NAME = media_pdb.fi.unam)
+    )
+  )
+
+
+
+MEDIA_POOLED =
+  (DESCRIPTION =
+    (ADDRESS_LIST =
+    (ADDRESS = (PROTOCOL = TCP)(HOST = h-ens-proy-final.fi.unam)(PORT = 1521))
+   )
+   (CONNECT_DATA =
+     (SERVICE_NAME = media_pdb.fi.unam)
+     (SERVER=POOLED)
+   )
+)
 EOF

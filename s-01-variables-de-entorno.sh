@@ -25,6 +25,8 @@ export PATH=$ORACLE_HOME/bin:$PATH
 export LD_LIBRARY_PATH=$ORACLE_HOME/lib:$LD_LIBRARY_PATH
 #alias globales
 alias sqlplus='rlwrap sqlplus'
+export NLS_DATE_FORMAT='yyyy/mm/dd hh24:mi:ss'
+alias rman='rlwrap rman'
 EOF
 
 
