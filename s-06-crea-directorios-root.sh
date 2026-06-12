@@ -52,16 +52,16 @@ ls -ld ${UNAM_HOME}/bda/pf/fra
 
 read -p "Eliminando contenido de directorios en caso de existir [Enter] para continuar, Ctrl-C para cancelar"
 
-rm -f /opt/oracle/oradata/${ORACLE_SID^^}/*.dbf
-rm -f /opt/oracle/oradata/${ORACLE_SID^^}/pdbseed/*.dbf
+rm -rf /opt/oracle/oradata/${ORACLE_SID^^}/*.dbf
+rm -rf /opt/oracle/oradata/${ORACLE_SID^^}/pdbseed/*.dbf
 
-rm -f ${UNAM_HOME}/bda/pf/core/d01/*
-rm -f ${UNAM_HOME}/bda/pf/core/d02/*
+rm -rf ${UNAM_HOME}/bda/pf/core/d01/*
+rm -rf ${UNAM_HOME}/bda/pf/core/d02/*
 rm -rf ${UNAM_HOME}/bda/pf/fra/*
 
-rm -f ${UNAM_HOME}/bda/pf/c0/d01/*.dbf
-rm -f ${UNAM_HOME}/bda/pf/c1/d01/*.dbf
-rm -f ${UNAM_HOME}/bda/pf/c1/d02/*.dbf
-rm -f ${UNAM_HOME}/bda/pf/c2/d01/*.dbf
+rm -rf ${UNAM_HOME}/bda/pf/c0/d01/*.dbf
+rm -rf ${UNAM_HOME}/bda/pf/c1/d01/*.dbf
+rm -rf ${UNAM_HOME}/bda/pf/c1/d02/*.dbf
+rm -rf ${UNAM_HOME}/bda/pf/c2/d01/*.dbf
 
 echo "Entorno limpio y listo."
