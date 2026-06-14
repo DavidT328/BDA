@@ -1,8 +1,8 @@
 Prompt Conectando como sys
-connect sys/system2 as sysdba
+connect sys/"Hola1234*" as sysdba
 
 create pluggable database usuarios_pdb
-  admin user usuarios_admin identified by system2
+  admin user usuarios_admin identified by "Hola1234*"
   file_name_convert = (
     '/opt/oracle/oradata/FREE/pdbseed/',
     '/opt/oracle/oradata/FREE/usuarios_pdb/'
@@ -16,7 +16,7 @@ alter pluggable database usuarios_pdb save state;
 
 
 create pluggable database media_pdb
-  admin user media_admin identified by system2
+  admin user media_admin identified by "Hola1234*"
   file_name_convert = (
     '/opt/oracle/oradata/FREE/pdbseed/',
     '/opt/oracle/oradata/FREE/media_pdb/'

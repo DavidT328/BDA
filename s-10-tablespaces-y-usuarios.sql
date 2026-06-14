@@ -1,10 +1,9 @@
-SET ECHO ON
 PROMPT 1. USUARIO GLOBAL EN CDB
-CONNECT sys/system2 as sysdba
+CONNECT sys/"Hola1234*" as sysdba
 
-PROMPT Creando usuario global c##david_admin...
-CREATE USER c##david_admin IDENTIFIED BY system2 CONTAINER=ALL;
-GRANT DBA TO c##david_admin CONTAINER=ALL;
+PROMPT Creando usuario global c##erick_admin...
+CREATE USER c##erick_admin IDENTIFIED BY "Hola1234*" CONTAINER=ALL;
+GRANT DBA TO c##erick_admin CONTAINER=ALL;
 
 
 PROMPT 2. TABLESPACES Y USUARIO EN PDB USUARIOS
@@ -19,13 +18,13 @@ DATAFILE
 CREATE SMALLFILE TABLESPACE usuarios_c1_idx_ts 
 DATAFILE '/unam/bda/pf/c1/d01/usuarios_c1_idx_ts_01.dbf' SIZE 100M AUTOEXTEND ON NEXT 10M MAXSIZE 1G;
 
-PROMPT Creando dueño de esquema david_usuarios...
-CREATE USER david_usuarios IDENTIFIED BY system2
+PROMPT Creando dueño de esquema erick_usuarios...
+CREATE USER erick_usuarios IDENTIFIED BY "Hola1234*"
     DEFAULT TABLESPACE usuarios_c1_data_ts
     QUOTA UNLIMITED ON usuarios_c1_data_ts
     QUOTA UNLIMITED ON usuarios_c1_idx_ts;
 
-GRANT CONNECT, RESOURCE, CREATE VIEW, CREATE SYNONYM TO david_usuarios;
+GRANT CONNECT, RESOURCE, CREATE VIEW, CREATE SYNONYM TO erick_usuarios;
 
 
 PROMPT 3. TABLESPACES Y USUARIO EN PDB MEDIA
@@ -41,13 +40,11 @@ DATAFILE '/unam/bda/pf/c1/d01/media_c1_idx_ts_01.dbf' SIZE 200M AUTOEXTEND ON NE
 CREATE BIGFILE TABLESPACE media_c2_lob_ts 
 DATAFILE '/unam/bda/pf/c2/d01/media_c2_lob_ts_01.dbf' SIZE 1G AUTOEXTEND ON NEXT 100M MAXSIZE 3G;
 
-PROMPT Creando dueno de esquema david_media...
-CREATE USER david_media IDENTIFIED BY system2
+PROMPT Creando dueno de esquema erick_media...
+CREATE USER erick_media IDENTIFIED BY "Hola1234*"
     DEFAULT TABLESPACE media_c1_data_ts
     QUOTA UNLIMITED ON media_c1_data_ts
     QUOTA UNLIMITED ON media_c1_idx_ts
     QUOTA UNLIMITED ON media_c2_lob_ts;
 
-GRANT CONNECT, RESOURCE, CREATE VIEW, CREATE SYNONYM TO david_media;
-
-SET ECHO OFF
+GRANT CONNECT, RESOURCE, CREATE VIEW, CREATE SYNONYM TO erick_media;
