@@ -1,5 +1,3 @@
-# Ojo, aun no configuramos la FRA pero ya tenemos su disco listo, configuraremos la FRA con la BD ya creada
-
 #!/bin/bash
 echo "1. Creando un archivo de parámetros básico"
 export ORACLE_SID=free

@@ -1,0 +1,9 @@
+docker run -i -t \
+-v /tmp/.X11-unix:/tmp/.X11-unix \
+-v /unam:/unam \
+--name c3-ens-proy-final \
+--hostname h-ens-proy-final \
+--network bda_network --ip 172.22.0.11 \
+--expose 1521 \
+--shm-size=2gb \
+-e DISPLAY=$DISPLAY baseproyecto:v3 bash

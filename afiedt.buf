@@ -1,0 +1,4 @@
+SELECT COUNT(*)
+FROM video_fragmento
+WHERE contenido IS NULL
+/
