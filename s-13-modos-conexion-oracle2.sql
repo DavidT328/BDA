@@ -1,21 +1,23 @@
-connect sys/system2 as sysdba
+CONNECT sys/"Hola1234*" as sysdba
 
--- habilitar modo compartido
-alter system set shared_servers = 3 scope=both;
-alter system set max_shared_servers = 20 scope=both;
-alter system set dispatchers scope=both;
+PROMPT === 1. Configurando el Modo Compartido (Shared Server) ===
+ALTER SYSTEM SET shared_servers = 3 SCOPE=BOTH;
+ALTER SYSTEM SET max_shared_servers = 20 SCOPE=BOTH;
+ALTER SYSTEM SET dispatchers = '(PROTOCOL=TCP)(DISPATCHERS=2)' SCOPE=BOTH;
 
--- habilidad pool
+PROMPT === 2. Configurando el Modo Pooled (DRCP) ===
+EXECUTE DBMS_CONNECTION_POOL.START_POOL();
 
-execute DBMS_CONNECTION_POOL.START_POOL();
--- minimo y maximo de conexiones
-EXECUTE DBMS_CONNECTION_POOL.ALTER_POOL(
-    pool_name=>'SYS_DEFAULT_CONNECTION_POOL', 
-    minsize=>2, 
-    maxsize=>10
+BEGIN
+    DBMS_CONNECTION_POOL.CONFIGURE_POOL(
+        pool_name => 'SYS_DEFAULT_CONNECTION_POOL', 
+        minsize   => 2, 
+        maxsize   => 10
     );
+END;
+/
+CONNECT sys/"Hola1234*"@media as sysdba
+ALTER SYSTEM DISABLE RESTRICTED SESSION;
 
---consulta para verificar el modo de conexión
-select server 
-from v$session
-where audsid = SYS_CONTEXT('userenv', 'sessionid');
+CONNECT sys/"Hola1234*"@exi as sysdba
+ALTER SYSTEM DISABLE RESTRICTED SESSION;
