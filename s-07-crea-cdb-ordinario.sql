@@ -1,3 +1,5 @@
+--@Autor: Erick Nava Santiago y David Tavera Castillo
+--@Descripción: creacion de la cdb
 Prompt conectando como SYS
 connect sys/system2 as sysdba
 

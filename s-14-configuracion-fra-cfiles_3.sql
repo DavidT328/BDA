@@ -1,3 +1,5 @@
+--@Autor: Erick Nava Santiago y David Tavera Castillo
+--@Descripción: multiplefeo u respaldo
 connect sys/"Hola1234*" as sysdba
 
 -- respaldo
@@ -10,7 +12,7 @@ ALTER SYSTEM RESET control_files SCOPE=SPFILE;
 SHUTDOWN ABORT;
 STARTUP NOMOUNT;
 
---archive contrl file que apunta a la fra //hacer manual desde oracle
+--archive contrl file que apunta a la fra /hacer manual desde oracle
 !echo "restore controlfile from '/unam/bda/pf/core/d01/control01.ctl';" | rman target /
 
 -- Mostrar la ruta dinámica que Oracle acaba de generar
