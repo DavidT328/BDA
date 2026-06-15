@@ -1,6 +1,6 @@
 #!/bin/bash
 # s-19-simula-ciclos.sh
-# Descripción: Simulación de la semana completa de backups para la plataforma de Streaming
+# Descripción: Simulación representativa de estrategia trimestral (Semana Normal vs Semana de Estreno)
 
 echo "==> 0. Compilando el procedimiento de carga y habilitando BCT"
 sqlplus -s sys/\"Hola1234\*\" as sysdba @s-18-procedimiento-simulacion.sql
@@ -8,78 +8,81 @@ sqlplus -s sys/\"Hola1234\*\" as sysdba @s-18-procedimiento-simulacion.sql
 echo "==> 1. Configurando parametros de RMAN"
 rman target / cmdfile=s-17-configuracion-respaldos.rman
 
-echo "==> DOMINGO: Backup Incremental Nivel 0 "
+# =========================================================
+# SEMANA 1: CICLO SEMANAL NORMAL (3 meses)
+# =========================================================
+echo " "
+
+echo "=== INICIANDO SEMANA 1: CICLO REGULAR ==="
+
+echo "-> DOMINGO S1: Backup Incremental N0 (Base)"
 rman target / << EOF
-backup incremental level 0 database tag backup_streaming_n0_dom;
+backup incremental level 0 database tag backup_S1_n0_dom;
 exit;
 EOF
 
-echo "==> LUNES: Carga de usuarios y Backup N1 Diferencial"
-sqlplus -s sys/\"Hola1234\*\" as sysdba << EOF
-ALTER SESSION SET CONTAINER = media_pdb;
-EXEC simula_carga_streaming(50);
-EXIT;
+# Lunes a Sábado con tráfico regular  y Diferenciales diarios
+for dia in LUNES MARTES MIERCOLES JUEVES VIERNES SABADO; do
+    echo "-> $dia S1: Tráfico regular y Backup N1-Diferencial"
+    sqlplus -s sys/\"Hola1234\*\" as sysdba << EOF
+    ALTER SESSION SET CONTAINER = media_pdb;
+    EXEC simula_carga_streaming(50);
+    EXIT;
 EOF
+    rman target / << EOF
+    backup incremental level 1 database tag backup_S1_n1d_${dia};
+    exit;
+EOF
+done
 
+
+# =========================================================
+# Semana 2 se estrena una pelicala
+# =========================================================
+echo " "
+echo "=== INICIANDO SEMANA 2: CICLO DE ESTRENO ==="
+
+echo "-> DOMINGO S2: Backup Incremental N0 (Base)"
 rman target / << EOF
-backup incremental level 1 database tag backup_streaming_n1d_lun;
+backup incremental level 0 database tag backup_S2_n0_dom;
 exit;
 EOF
 
-echo "MARTES: Carga de usuarios y Backup N1 Diferencial"
+echo "-> LUNES a MIERCOLES S2: Tráfico regular y Backups N1-Diferenciales"
+for dia in LUNES MARTES MIERCOLES; do
+    sqlplus -s sys/\"Hola1234\*\" as sysdba << EOF
+    ALTER SESSION SET CONTAINER = media_pdb;
+    EXEC simula_carga_streaming(50);
+    EXIT;
+EOF
+    rman target / << EOF
+    backup incremental level 1 database tag backup_S2_n1d_${dia};
+    exit;
+EOF
+done
+
+echo "-> JUEVES S2 (ESTRENO): Tráfico MASIVO y Backup N1-ACUMULATIVO"
 sqlplus -s sys/\"Hola1234\*\" as sysdba << EOF
 ALTER SESSION SET CONTAINER = media_pdb;
-EXEC simula_carga_streaming(75);
-EXIT;
-EOF
-
-rman target / << EOF
-backup incremental level 1 database tag backup_streaming_n1d_mar;
-exit;
-EOF
-
-echo "MIÉRCOLES: Carga de usuarios y Backup N1 Diferencial"
-sqlplus -s sys/\"Hola1234\*\" as sysdba << EOF
-ALTER SESSION SET CONTAINER = media_pdb;
-EXEC simula_carga_streaming(100);
-EXIT;
-EOF
-rman target / << EOF
-backup incremental level 1 database tag backup_streaming_n1d_mie;
-exit;
-EOF
-
-echo "JUEVES: Carga de usuarios y Backup N1 CUMULATIVO"
-sqlplus -s sys/\"Hola1234\*\" as sysdba << EOF
-ALTER SESSION SET CONTAINER = media_pdb;
-EXEC simula_carga_streaming(150);
-EXIT;
-EOF
-rman target / << EOF
-backup incremental level 1 cumulative database tag backup_streaming_n1c_jue;
-exit;
-EOF
-
-echo "VIERNES: Carga de usuarios y Backup N1 Diferencial"
-sqlplus -s sys/\"Hola1234\*\" as sysdba << EOF
-ALTER SESSION SET CONTAINER = media_pdb;
-EXEC simula_carga_streaming(200);
-EXIT;
-EOF
-rman target / << EOF
-backup incremental level 1 database tag backup_streaming_n1d_vie;
-exit;
-EOF
-
-echo "SÁBADO: Carga de usuarios y Backup N1 Diferencial"
-sqlplus -s sys/\"Hola1234\*\" as sysdba << EOF
-ALTER SESSION SET CONTAINER = media_pdb;
-EXEC simula_carga_streaming(300);
+EXEC simula_carga_streaming(500);  -- ¡10 veces más tráfico por el estreno!
 EXIT;
 EOF
 rman target / << EOF
-backup incremental level 1 database tag backup_streaming_n1d_sab;
+backup incremental level 1 cumulative database tag backup_S2_n1c_jue_estreno;
 exit;
 EOF
 
-echo "==> Simulación de la estrategia semanal completada con exito."
+echo "-> VIERNES y SABADO S2: Tráfico post-estreno y Backups N1-Diferenciales"
+for dia in VIERNES SABADO; do
+    sqlplus -s sys/\"Hola1234\*\" as sysdba << EOF
+    ALTER SESSION SET CONTAINER = media_pdb;
+    EXEC simula_carga_streaming(80);
+    EXIT;
+EOF
+    rman target / << EOF
+    backup incremental level 1 database tag backup_S2_n1d_${dia};
+    exit;
+EOF
+done
+
+echo "==> Simulación estratégica completada con éxito."
