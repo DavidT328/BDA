@@ -1,7 +1,7 @@
 connect sys/"Hola1234*" as sysdba
 
 -- Tamanio y ubicacion del area de recuperacion rapida
-alter system set db_recovery_file_dest_size = 2g scope=both;
+alter system set db_recovery_file_dest_size = 10g scope=both;
 alter system set db_recovery_file_dest = '/unam/bda/pf/fra' scope=both;
 
 -- Copia a redologs

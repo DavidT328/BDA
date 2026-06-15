@@ -1,4 +1,4 @@
-#docker network create --subnet=172.22.0.0/16 bda_network       --Esto ejecutalo si no lo tienes creado
+#docker network create --subnet=172.22.0.0/16 bda_network       
 docker run -i -t \
 -v /tmp/.X11-unix:/tmp/.X11-unix \
 -v ${UNAM_HOME}:${UNAM_HOME} \
