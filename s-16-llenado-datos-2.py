@@ -10,7 +10,7 @@ def quitar_acentos(texto):
     if not texto: return ""
     return unicodedata.normalize('NFKD', texto).encode('ASCII', 'ignore').decode('utf-8')
 
-def generar_datos_usuarios(num_registros=2000):
+def generar_datos_usuarios(num_registros=20):
     print("Generando carga para PDB Usuarios (Alineado a tu diseño físico)...")
     usuarios_generados = []
 
@@ -93,7 +93,7 @@ def generar_datos_usuarios(num_registros=2000):
     
     return usuarios_generados
 
-def generar_datos_media_completo(lista_usuarios, num_contenidos=2000, num_reproducciones=2500, num_comentarios=3500):
+def generar_datos_media_completo(lista_usuarios, num_contenidos=20, num_reproducciones=30, num_comentarios=40):
     print("Generando carga para PDB Media (Sincronizando la tabla espejo)...")
     num_registros_usuarios = len(lista_usuarios)
 

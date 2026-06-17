@@ -14,6 +14,7 @@ ADD ( contenido BLOB )
 LOB (contenido) STORE AS SECUREFILE audio_contenido_lob (
     TABLESPACE media_c2_lob_ts
 );
+
 PROMPT =========================================================
 PROMPT 2. Inicializando los LOBs (EMPTY_BLOB y EMPTY_CLOB)
 PROMPT =========================================================

@@ -1,4 +1,2 @@
-SELECT COUNT(*)
-FROM video_fragmento
-WHERE contenido IS NULL
+SELECT l.group#, l.status AS estado_grupo, lf.member AS ruta_archivo FROM v$log l JOIN v$logfile lf ON l.group# = lf.group# ORDER BY l.group#, lf.member
 /

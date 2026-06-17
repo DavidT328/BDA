@@ -22,8 +22,8 @@ BEGIN
         INSERT INTO erick_media.reproduccion (fecha, usuario_id, contenido_id, segundo_inicial)
         VALUES (
             SYSDATE, 
-            TRUNC(DBMS_RANDOM.VALUE(1, 100)), 
-            TRUNC(DBMS_RANDOM.VALUE(1, 100)),
+            TRUNC(DBMS_RANDOM.VALUE(1, 10)), 
+            TRUNC(DBMS_RANDOM.VALUE(1, 10)),
             0
         );
     END LOOP;

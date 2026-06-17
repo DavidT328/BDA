@@ -1,13 +1,8 @@
 connect sys/"Hola1234*" as sysdba
-
-SHUTDOWN IMMEDIATE;
-STARTUP MOUNT;
-ALTER DATABASE ARCHIVELOG;
-ALTER DATABASE OPEN;
-
 --configuracion de ruta
-ALTER SYSTEM SET log_archive_dest_2='LOCATION=/unam/bda/pf/archivelogs_secundarios' SCOPE=BOTH;
 
+ALTER SYSTEM SET log_archive_dest_1='LOCATION=/unam/bda/pf/c0/d03/archivelogs_secundarios/' SCOPE=BOTH;
+Alter system set log_archive_dest_2='LOCATION=USE_DB_RECOVERY_FILE_DEST' scope=both;
 --forzado de archivos fisicos
 ALTER SYSTEM SWITCH LOGFILE;
 ALTER SYSTEM SWITCH LOGFILE;

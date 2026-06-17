@@ -5,8 +5,6 @@
 echo "==> 0. Compilando el procedimiento de carga y habilitando BCT"
 sqlplus -s sys/\"Hola1234\*\" as sysdba @s-18-procedimiento-simulacion.sql
 
-echo "==> 1. Configurando parametros de RMAN"
-rman target / cmdfile=s-17-configuracion-respaldos.rman
 
 # =========================================================
 # SEMANA 1: CICLO SEMANAL NORMAL (3 meses)
@@ -15,9 +13,9 @@ echo " "
 
 echo "=== INICIANDO SEMANA 1: CICLO REGULAR ==="
 
-echo "-> DOMINGO S1: Backup Incremental N0 (Base)"
+echo "==> DOMINGO: Backup Incremental Nivel 0 "
 rman target / << EOF
-backup incremental level 0 database tag backup_S1_n0_dom;
+backup incremental level 0 database tag backup_streaming_n0_dom;
 exit;
 EOF
 
@@ -26,7 +24,7 @@ for dia in LUNES MARTES MIERCOLES JUEVES VIERNES SABADO; do
     echo "-> $dia S1: Tráfico regular y Backup N1-Diferencial"
     sqlplus -s sys/\"Hola1234\*\" as sysdba << EOF
     ALTER SESSION SET CONTAINER = media_pdb;
-    EXEC simula_carga_streaming(50);
+    EXEC simula_carga_streaming(20);
     EXIT;
 EOF
     rman target / << EOF
@@ -35,9 +33,19 @@ EOF
 EOF
 done
 
+echo "==> DOMINGO: Backup Incremental Nivel 0 "
+sqlplus -s sys/\"Hola1234\*\" as sysdba << EOF
+    ALTER SESSION SET CONTAINER = media_pdb;
+    EXEC simula_carga_streaming(20);
+    EXIT;
+EOF
+rman target / << EOF
+backup incremental level 0 database tag backup_streaming_n0_dom;
+exit;
+EOF
 
 # =========================================================
-# Semana 2 se estrena una pelicala
+# Semana 2 se e./strena una pelicala
 # =========================================================
 echo " "
 echo "=== INICIANDO SEMANA 2: CICLO DE ESTRENO ==="
@@ -52,7 +60,7 @@ echo "-> LUNES a MIERCOLES S2: Tráfico regular y Backups N1-Diferenciales"
 for dia in LUNES MARTES MIERCOLES; do
     sqlplus -s sys/\"Hola1234\*\" as sysdba << EOF
     ALTER SESSION SET CONTAINER = media_pdb;
-    EXEC simula_carga_streaming(50);
+    EXEC simula_carga_streaming(20);
     EXIT;
 EOF
     rman target / << EOF
@@ -64,7 +72,7 @@ done
 echo "-> JUEVES S2 (ESTRENO): Tráfico MASIVO y Backup N1-ACUMULATIVO"
 sqlplus -s sys/\"Hola1234\*\" as sysdba << EOF
 ALTER SESSION SET CONTAINER = media_pdb;
-EXEC simula_carga_streaming(500);  -- ¡10 veces más tráfico por el estreno!
+EXEC simula_carga_streaming(50);  -- ¡10 veces más tráfico por el estreno!
 EXIT;
 EOF
 rman target / << EOF

@@ -1,19 +1,9 @@
-# s-17-configuracion-respaldos.rman
-# Configuracion con rutas locales y compresion activada
+CONFIGURE CHANNEL DEVICE TYPE DISK MAXPIECESIZE 1G;
 
-# Activar compresion para no llenar el disco duro de la VM
-CONFIGURE DEVICE TYPE DISK BACKUP TYPE TO COMPRESSED BACKUPSET;
-
-CONFIGURE CHANNEL DEVICE TYPE DISK FORMAT '/unam/bda/pf/fra/backup_%U.bkp' MAXPIECESIZE 2G;
-  
-# Respaldo automatico del archivo de control
 CONFIGURE CONTROLFILE AUTOBACKUP ON;
-  
-# Autobackups a la FRA
-CONFIGURE CONTROLFILE AUTOBACKUP FORMAT FOR DEVICE TYPE DISK TO '/unam/bda/pf/fra/ctl_file_%F.bkp';
-  
-# Snapshot de los controlfile a core d01
-CONFIGURE SNAPSHOT CONTROLFILE NAME '/unam/bda/pf/core/d01/snapcf_FREE.f';
-  
-# Politica de retencion por ventana de tiempo (7 dias)
+
+CONFIGURE CONTROLFILE AUTOBACKUP FORMAT FOR DEVICE TYPE DISK CLEAR;
+
+CONFIGURE SNAPSHOT CONTROLFILE NAME TO '/unam/bda/pf/c0/d02/snapcf_FREE.f';
+
 CONFIGURE RETENTION POLICY TO RECOVERY WINDOW OF 7 DAYS;

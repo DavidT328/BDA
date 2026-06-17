@@ -1,5 +1,3 @@
---@Autor: Erick Nava Santiago y David Tavera Castillo
---@Descripción: creacion del spfile
 Prompt Conectando como sys empleando archivo de passwords
 connect sys/Hola1234* as sysdba
 

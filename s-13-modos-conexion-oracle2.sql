@@ -19,5 +19,5 @@ END;
 CONNECT sys/"Hola1234*"@media as sysdba
 ALTER SYSTEM DISABLE RESTRICTED SESSION;
 
-CONNECT sys/"Hola1234*"@exi as sysdba
+CONNECT sys/"Hola1234*"@usuarios as sysdba
 ALTER SYSTEM DISABLE RESTRICTED SESSION;

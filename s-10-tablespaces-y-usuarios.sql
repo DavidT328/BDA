@@ -13,10 +13,10 @@ PROMPT Creando tablespaces locales para el modulo de Usuarios...
 CREATE TABLESPACE usuarios_c1_data_ts 
 DATAFILE 
     '/unam/bda/pf/c1/d01/usuarios_c1_data_ts_01.dbf' SIZE 100M AUTOEXTEND ON NEXT 10M MAXSIZE 1G,
-    '/unam/bda/pf/c1/d02/usuarios_c1_data_ts_02.dbf' SIZE 100M AUTOEXTEND ON NEXT 10M MAXSIZE 1G;
+    '/unam/bda/pf/c1/d01/usuarios_c1_data_ts_02.dbf' SIZE 100M AUTOEXTEND ON NEXT 10M MAXSIZE 1G;
 
 CREATE SMALLFILE TABLESPACE usuarios_c1_idx_ts 
-DATAFILE '/unam/bda/pf/c1/d01/usuarios_c1_idx_ts_01.dbf' SIZE 100M AUTOEXTEND ON NEXT 10M MAXSIZE 1G;
+DATAFILE '/unam/bda/pf/c1/d02/usuarios_c1_idx_ts_01.dbf' SIZE 100M AUTOEXTEND ON NEXT 10M MAXSIZE 1G;
 
 PROMPT Creando dueño de esquema erick_usuarios...
 CREATE USER erick_usuarios IDENTIFIED BY "Hola1234*"
@@ -24,8 +24,7 @@ CREATE USER erick_usuarios IDENTIFIED BY "Hola1234*"
     QUOTA UNLIMITED ON usuarios_c1_data_ts
     QUOTA UNLIMITED ON usuarios_c1_idx_ts;
 
-GRANT CONNECT, CREATE SESSION,
-CREATE PROCEDURE,  RESOURCE, CREATE VIEW, CREATE SYNONYM TO erick_usuarios;
+GRANT CONNECT, RESOURCE, CREATE VIEW, CREATE SYNONYM TO erick_usuarios;
 
 
 PROMPT 3. TABLESPACES Y USUARIO EN PDB MEDIA
@@ -36,7 +35,7 @@ CREATE BIGFILE TABLESPACE media_c1_data_ts
 DATAFILE '/unam/bda/pf/c1/d01/media_c1_data_ts_01.dbf' SIZE 500M AUTOEXTEND ON NEXT 50M MAXSIZE 2G;
 
 CREATE SMALLFILE TABLESPACE media_c1_idx_ts 
-DATAFILE '/unam/bda/pf/c1/d01/media_c1_idx_ts_01.dbf' SIZE 200M AUTOEXTEND ON NEXT 20M MAXSIZE 1G;
+DATAFILE '/unam/bda/pf/c1/d02/media_c1_idx_ts_01.dbf' SIZE 200M AUTOEXTEND ON NEXT 20M MAXSIZE 1G;
 
 CREATE BIGFILE TABLESPACE media_c2_lob_ts 
 DATAFILE '/unam/bda/pf/c2/d01/media_c2_lob_ts_01.dbf' SIZE 1G AUTOEXTEND ON NEXT 100M MAXSIZE 3G;
@@ -48,7 +47,4 @@ CREATE USER erick_media IDENTIFIED BY "Hola1234*"
     QUOTA UNLIMITED ON media_c1_idx_ts
     QUOTA UNLIMITED ON media_c2_lob_ts;
 
-
-
-GRANT CONNECT, CREATE SESSION,
-CREATE PROCEDURE,  RESOURCE, CREATE VIEW, CREATE SYNONYM TO erick_media;
+GRANT CONNECT, RESOURCE, CREATE VIEW, CREATE SYNONYM TO erick_media;

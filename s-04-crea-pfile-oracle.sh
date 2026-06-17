@@ -11,8 +11,8 @@ echo \
 "db_name=${ORACLE_SID}
 memory_target=768M
 control_files=(
-  /unam/bda/pf/core/d01/control01.ctl,
-  /unam/bda/pf/core/d02/control02.ctl,
+  /unam/bda/pf/c0/d02/control01.ctl,
+  /unam/bda/pf/c0/d03/control02.ctl,
 )
 db_domain=fi.unam
 enable_pluggable_database=true
